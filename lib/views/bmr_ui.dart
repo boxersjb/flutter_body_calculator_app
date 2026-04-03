@@ -17,7 +17,7 @@ class _BmrUiState extends State<BmrUi> {
           child: Center(
             child: Column(
               children: [
-                //ส่วนซื้อหน้าจอ และรูป
+                
                 Text(
                   'คำนวนาอัตราการเผาผลาญที่',
                   style: TextStyle(

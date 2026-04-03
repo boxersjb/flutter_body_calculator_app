@@ -14,7 +14,6 @@ class _AboutUiState extends State<AboutUi> {
       backgroundColor: Colors.redAccent,
       body: Stack(
         children: [
-          //ชั้นที่ 1
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -48,7 +47,7 @@ class _AboutUiState extends State<AboutUi> {
               ],
             ),
           ),
-          //ชั้นที่ 2
+          
           Center(child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [

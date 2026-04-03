@@ -17,7 +17,7 @@ class _BmiUiState extends State<BmiUi> {
           child: Center(
             child: Column(
               children: [
-                //ส่วนซื้อหน้าจอ และรูป
+                
                 Text(
                   'คำนวนาค่าดัชนี้ร่างกาย BMI',
                   style: TextStyle(
@@ -29,7 +29,7 @@ class _BmiUiState extends State<BmiUi> {
                 SizedBox(height: 20),
                 Image.asset('assets/images/bmi.png', width: 100, height: 100),
                 SizedBox(height: 20),
-                //ส่วนการป้อนข้อมูล
+
                 SizedBox(height: 10),
                 Align(
                   alignment: Alignment.centerLeft,
@@ -60,7 +60,7 @@ class _BmiUiState extends State<BmiUi> {
                     hintText: 'กรุณากรอกส่วนสูง',
                   ),
                 ),
-                //ส่วนปุ่ม
+
                 SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {},
@@ -85,7 +85,7 @@ class _BmiUiState extends State<BmiUi> {
                     fixedSize: Size(MediaQuery.of(context).size.width, 50),
                   ),
                 ),
-                //ส่วนแสดงผลข้อมูลที่ไดจากการคำนวน
+
                 SizedBox(height: 20),
                 Container(
                   width: MediaQuery.of(context).size.width,
