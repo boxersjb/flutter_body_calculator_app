@@ -1,3 +1,5 @@
+// ignore_for_file: sort_child_properties_last
+
 import 'package:flutter/material.dart';
 
 class BmiUi extends StatefulWidget {
@@ -8,6 +10,14 @@ class BmiUi extends StatefulWidget {
 }
 
 class _BmiUiState extends State<BmiUi> {
+  //text field controller
+  TextEditingController weightController = TextEditingController();
+  TextEditingController heightController = TextEditingController();
+
+  //dispose controller
+  String bmiResult = '0.00';
+  String bmiResultText = '';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,6 +49,7 @@ class _BmiUiState extends State<BmiUi> {
                   ),
                 ),
                 TextField(
+                  controller: weightController,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
@@ -54,6 +65,7 @@ class _BmiUiState extends State<BmiUi> {
                   ),
                 ),
                 TextField(
+                  controller: heightController,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
@@ -63,7 +75,36 @@ class _BmiUiState extends State<BmiUi> {
 
                 SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    //Validate input
+                    if (weightController.text.isEmpty ||
+                        heightController.text.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('กรุณากรอกน้ำหนักและส่วนสูง'),
+                          backgroundColor: Colors.redAccent,
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                      return;
+                    }
+                    //Calculate BMI
+                    double weight = double.parse(weightController.text);
+                    double height = double.parse(heightController.text) / 100;
+                    double bmi = weight / (height * height);
+                    setState(() {
+                      bmiResult = bmi.toStringAsFixed(2);
+                      if (bmi < 18.5) {
+                        bmiResultText = 'น้ำหนักน้อยเกินไป';
+                      } else if (bmi >= 18.5 && bmi < 25) {
+                        bmiResultText = 'น้ำหนักปกติ';
+                      } else if (bmi >= 25 && bmi < 30) {
+                        bmiResultText = 'น้ำหนักเกิน';
+                      } else {
+                        bmiResultText = 'โรคอ้วน';
+                      }
+                    });
+                  },
                   child: Text(
                     'คำนวน BMI',
                     style: TextStyle(color: Colors.white),
@@ -75,7 +116,15 @@ class _BmiUiState extends State<BmiUi> {
                 ),
                 SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    //Clear input
+                    weightController.clear();
+                    heightController.clear();
+                    setState(() {
+                      bmiResult = '0.00';
+                      bmiResultText = '';
+                    });
+                  },
                   child: Text(
                     'ล้างข้อมูล',
                     style: TextStyle(color: Colors.white),
@@ -97,14 +146,14 @@ class _BmiUiState extends State<BmiUi> {
                   child: Column(
                     children: [
                       Text('BMI:'),
-                      Text('0.00',
+                      Text(bmiResult,
                         style: TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.bold,
                           color: Colors.redAccent,
                         ),
                       ),
-                      Text('การแปลผล: '),
+                      Text(bmiResultText),
                     ],
                   ),
                 ),

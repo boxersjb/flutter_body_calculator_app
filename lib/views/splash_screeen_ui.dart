@@ -21,7 +21,6 @@ class _SplashScreeenUiState extends State<SplashScreeenUi> {
           context,
           MaterialPageRoute(
             builder: (context) => HomeUi(),
-            //เปิดหน้าhomeUI
           ),
         );
       },

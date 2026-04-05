@@ -1,3 +1,5 @@
+// ignore_for_file: sort_child_properties_last
+
 import 'package:flutter/material.dart';
 
 class BmrUi extends StatefulWidget {
@@ -8,6 +10,17 @@ class BmrUi extends StatefulWidget {
 }
 
 class _BmrUiState extends State<BmrUi> {
+  //text field controller
+  TextEditingController weightController = TextEditingController();
+  TextEditingController heightController = TextEditingController();
+  TextEditingController ageController = TextEditingController();
+
+  //dispose controller
+  String bmrResult = '0.00';
+
+  //gender
+  String gender = 'ชาย';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,11 +61,17 @@ class _BmrUiState extends State<BmrUi> {
                   ),
                 ),
                 SizedBox(height: 20),
+                
                 Row(
                   children: [
                     SizedBox(height: 20),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        //Set gender
+                        setState(() { 
+                          gender = 'ชาย';
+                        });
+                      },
                       child: Text(
                         'ชาย',
                         style: TextStyle(
@@ -62,16 +81,22 @@ class _BmrUiState extends State<BmrUi> {
                         ),
                       ),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blueAccent,
+                        backgroundColor: gender == 'ชาย' ? Colors.blue[300] : Colors.white,
                         fixedSize: Size(150, 60),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadiusGeometry.circular(8),
                         ),
                       ),
                     ),
+                    
                     SizedBox(width: 20),
-                    OutlinedButton(
-                      onPressed: () {},
+                    ElevatedButton(
+                      onPressed: () {
+                        //Set gender
+                        setState(() {
+                          gender = 'หญิง';
+                        });
+                      },
                       child: Text(
                         'หญิง',
                         style: TextStyle(
@@ -80,7 +105,8 @@ class _BmrUiState extends State<BmrUi> {
                           color: Colors.black,
                         ),
                       ),
-                      style: OutlinedButton.styleFrom(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: gender == 'หญิง' ? Colors.pink[300] : Colors.white,
                         fixedSize: Size(150, 60),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadiusGeometry.circular(8),
@@ -99,6 +125,7 @@ class _BmrUiState extends State<BmrUi> {
                 ),
                 SizedBox(height: 10),
                 TextField(
+                  controller: weightController,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
@@ -115,6 +142,7 @@ class _BmrUiState extends State<BmrUi> {
                 ),
                 SizedBox(height: 10),
                 TextField(
+                  controller: heightController,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
@@ -131,6 +159,7 @@ class _BmrUiState extends State<BmrUi> {
                 ),
                 SizedBox(height: 10),
                 TextField(
+                  controller: ageController,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
@@ -139,7 +168,35 @@ class _BmrUiState extends State<BmrUi> {
                 ),
                 SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    //Valaidate input
+                    if (weightController.text.isEmpty ||
+                        heightController.text.isEmpty ||
+                        ageController.text.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('กรุณากรอกน้ำหนัก ส่วนสูง และอายุ'),
+                          backgroundColor: Colors.redAccent,
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                      return;
+                    }
+
+                    //Calculate BMR
+                    double weight = double.parse(weightController.text);
+                    double height = double.parse(heightController.text);
+                    double age = double.parse(ageController.text);
+                    double bmr = 0;
+                    if (gender == 'ชาย') {
+                      bmr = 66 + (13.7 * weight) + (5 * height) - (6.8 * age);
+                    } else {
+                      bmr = 655 + (9.6 * weight) + (1.8 * height) - (4.7 * age);
+                    }
+                    setState(() {
+                      bmrResult = bmr.toStringAsFixed(2);
+                    });
+                  },
                   child: Text(
                     'คำนวน BMI',
                     style: TextStyle(color: Colors.white),
@@ -151,7 +208,16 @@ class _BmrUiState extends State<BmrUi> {
                 ),
                 SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    //Clear input
+                    weightController.clear();
+                    heightController.clear();
+                    ageController.clear();
+                    setState(() {
+                      bmrResult = '0.00';
+                      gender = 'ชาย';
+                    });
+                  },
                   child: Text(
                     'ล้างข้อมูล',
                     style: TextStyle(color: Colors.white),
@@ -173,7 +239,7 @@ class _BmrUiState extends State<BmrUi> {
                   child: Column(
                     children: [
                       Text('BMR:'),
-                      Text('0.00',
+                      Text(bmrResult,
                         style: TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.bold,
